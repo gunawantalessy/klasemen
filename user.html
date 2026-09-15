@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasemen Turnamen Bulutangkis Instansi - HSN Cup 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        badminton: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            background-image: 
+                linear-gradient(rgba(241, 245, 249, 0.88), rgba(226, 232, 240, 0.92)),
+                url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .clean-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .shuttle-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        /* Rank change animations — slow & smooth */
+        tr.rank-row {
+            transition: transform 1.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.6s ease, box-shadow 0.6s ease;
+            will-change: transform;
+        }
+        tr.rank-row.animating {
+            z-index: 10;
+            position: relative;
+        }
+        @keyframes rankUpGlow {
+            0%   { background-color: rgba(16, 185, 129, 0.45); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+            25%  { background-color: rgba(16, 185, 129, 0.32); box-shadow: 0 0 18px 4px rgba(16, 185, 129, 0.35); }
+            60%  { background-color: rgba(16, 185, 129, 0.18); box-shadow: 0 0 10px 2px rgba(16, 185, 129, 0.2); }
+            100% { background-color: transparent; box-shadow: none; }
+        }
+        @keyframes rankDownGlow {
+            0%   { background-color: rgba(244, 63, 94, 0.28); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.25); }
+            40%  { background-color: rgba(244, 63, 94, 0.16); box-shadow: 0 0 10px 2px rgba(244, 63, 94, 0.15); }
+            100% { background-color: transparent; box-shadow: none; }
+        }
+        @keyframes rankBadgePop {
+            0%   { transform: scale(1); }
+            30%  { transform: scale(1.45); }
+            55%  { transform: scale(0.92); }
+            75%  { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+        tr.rank-up {
+            animation: rankUpGlow 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        tr.rank-down {
+            animation: rankDownGlow 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        tr.rank-up .rank-badge,
+        tr.rank-down .rank-badge {
+            animation: rankBadgePop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-full pb-12">
+
+    <header class="clean-panel sticky top-0 z-40 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-md shadow-emerald-600/25 text-white shrink-0 shuttle-badge" title="HSN Cup Badminton 2026">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="9" cy="9" rx="5" ry="6" />
+                        <line x1="12.5" y1="13.2" x2="19.5" y2="20.2" stroke-width="2.5" />
+                        <line x1="18" y1="18.7" x2="21" y2="21.7" stroke-width="3.5" />
+                        <line x1="9" y1="3" x2="9" y2="15" stroke-width="1" opacity="0.6" />
+                        <line x1="4" y1="9" x2="14" y2="9" stroke-width="1" opacity="0.6" />
+                        <path d="M15 4.5 L19.5 9" stroke-width="1.8" />
+                        <path d="M16.5 3.5 L20.5 7.5" stroke-width="1.5" />
+                        <path d="M14 6 L18 10" stroke-width="1.5" />
+                        <circle cx="19.5" cy="4.5" r="1.5" fill="currentColor" stroke="none" />
+                    </svg>
+                </div>
+                <div class="border-l border-slate-300 pl-3">
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                        HSN CUP <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 font-medium border border-emerald-500/20">Badminton 2026</span>
+                    </h1>
+                    <p class="text-xs font-medium text-slate-600">Klasemen Resmi & Babak Gugur</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <span class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold flex items-center gap-2 shadow-xs">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>Live Update</span>
+                </span>
+                <button onclick="refreshDataManual()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition border border-slate-200" title="Refresh Data">
+                    <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Banner: tampilan dikontrol admin -->
+        <div id="admin-control-banner" class="hidden clean-panel rounded-2xl px-4 py-3 border border-sky-200 bg-sky-50/80 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 text-sm">
+                <span class="w-8 h-8 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center border border-sky-200 shrink-0">
+                    <i class="fa-solid fa-lock text-xs"></i>
+                </span>
+                <div>
+                    <p class="font-bold text-slate-800 text-xs sm:text-sm">Tampilan dikontrol oleh Admin</p>
+                    <p class="text-[11px] text-slate-500" id="admin-control-label">Mode: —</p>
+                </div>
+            </div>
+            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-sky-100 text-sky-700 border border-sky-200 uppercase tracking-wide" id="admin-control-mode-badge">—</span>
+        </div>
+
+        <!-- Navigation Tabs (Only Penyisihan and Semifinal & Final) -->
+        <div id="user-tab-nav" class="flex border-b border-slate-200 bg-white/70 backdrop-blur-md rounded-2xl p-1.5 shadow-xs border overflow-x-auto gap-2">
+            <button id="tab-btn-penyisihan" onclick="switchTab('penyisihan')" class="flex-1 min-w-[200px] py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-xs">
+                <i class="fa-solid fa-list-ol"></i> Babak Penyisihan (Grup A & B)
+            </button>
+            <button id="tab-btn-knockout" onclick="switchTab('knockout')" class="flex-1 min-w-[200px] py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <i class="fa-solid fa-trophy text-amber-500"></i> Semifinal & Grand Final
+            </button>
+        </div>
+
+        <!-- TAB CONTENT: PENYISIHAN -->
+        <div id="tab-content-penyisihan" class="space-y-8">
+            <div class="clean-panel rounded-2xl p-5 border-l-4 border-l-emerald-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="space-y-1">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-700 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info"></i> Sistem Penilaian Klasemen
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Menang <span class="font-bold text-slate-900">2:0</span> = <span class="text-emerald-700 font-extrabold">3 Poin</span> &bull; 
+                        Menang <span class="font-bold text-slate-900">2:1</span> = <span class="text-emerald-700 font-extrabold">2 Poin</span> (Kalah: 1 Poin) &bull; 
+                        Kalah <span class="font-bold text-slate-900">0:2</span> = <span class="text-rose-600 font-extrabold">0 Poin</span>.
+                        <span class="font-semibold text-slate-900 block sm:inline mt-1 sm:mt-0">Top 2 tiap grup berhak melaju ke Babak Semifinal!</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- GROUP A TABLE -->
+                <div class="clean-panel rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 font-black text-lg shadow-xs">
+                                    A
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-extrabold text-slate-900">Grup A</h3>
+                                    <p class="text-xs text-slate-500" id="group-a-count">5 Instansi Peserta</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                                Klasemen Sementara
+                            </span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-slate-400 text-xs uppercase tracking-wider">
+                                        <th class="py-3 px-2 font-semibold">Pos</th>
+                                        <th class="py-3 px-3 font-semibold">Instansi</th>
+                                        <th class="py-3 px-2 text-center font-semibold" title="Main">M</th>
+                                        <th class="py-3 px-2 text-center font-semibold" title="Menang-Kalah Match">M-K</th>
+                                        <th class="py-3 px-2 text-center font-semibold" title="Game Menang-Kalah">GM-GK</th>
+                                        <th class="py-3 px-3 text-center font-extrabold text-emerald-600">Poin</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="group-a-table-body" class="divide-y divide-slate-100">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                        <span><i class="fa-solid fa-medal text-amber-500 mr-1"></i> Posisi 1 & 2 Lolos Semifinal</span>
+                        <span class="text-slate-400 font-semibold">Grup A</span>
+                    </div>
+                </div>
+
+                <!-- GROUP B TABLE -->
+                <div class="clean-panel rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600 font-black text-lg shadow-xs">
+                                    B
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-extrabold text-slate-900">Grup B</h3>
+                                    <p class="text-xs text-slate-500" id="group-b-count">5 Instansi Peserta</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                                Klasemen Sementara
+                            </span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-slate-400 text-xs uppercase tracking-wider">
+                                        <th class="py-3 px-2 font-semibold">Pos</th>
+                                        <th class="py-3 px-3 font-semibold">Instansi</th>
+                                        <th class="py-3 px-2 text-center font-semibold" title="Main">M</th>
+                                        <th class="py-3 px-2 text-center font-semibold" title="Menang-Kalah Match">M-K</th>
+                                        <th class="py-3 px-2 text-center font-semibold" title="Game Menang-Kalah">GM-GK</th>
+                                        <th class="py-3 px-3 text-center font-extrabold text-emerald-600">Poin</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="group-b-table-body" class="divide-y divide-slate-100">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                        <span><i class="fa-solid fa-medal text-amber-500 mr-1"></i> Posisi 1 & 2 Lolos Semifinal</span>
+                        <span class="text-slate-400 font-semibold">Grup B</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: SEMIFINAL & FINAL -->
+        <div id="tab-content-knockout" class="space-y-8 hidden">
+            <div class="clean-panel rounded-2xl p-6 shadow-sm border-l-4 border-l-amber-500 bg-gradient-to-r from-amber-50/40 to-emerald-50/40">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-sitemap text-amber-500"></i> Bracket Babak Gugur (Knockout)
+                        </h2>
+                        <p class="text-xs text-slate-600 mt-1">
+                            Peserta Semifinal secara otomatis ditentukan dari peringkat 1 & 2 Klasemen Akhir Grup A dan B.
+                        </p>
+                    </div>
+                    <button onclick="switchTab('penyisihan')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold border border-slate-300 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-left"></i> Cek Klasemen Grup
+                    </button>
+                </div>
+            </div>
+
+            <!-- SEMIFINAL MATCHES -->
+            <div class="space-y-4" id="user-sf-section">
+                <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                    <span class="w-6 h-6 rounded bg-sky-100 text-sky-700 inline-flex items-center justify-center text-xs font-bold">SF</span>
+                    Babak Semifinal
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- SF 1 -->
+                    <div class="clean-panel rounded-2xl p-5 shadow-sm space-y-4 border border-slate-200">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <span class="text-xs font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200">Semifinal 1</span>
+                            <span class="text-xs font-medium text-slate-400">Juara Grup A vs Runner-Up Grup B</span>
+                        </div>
+                        <div class="space-y-3" id="sf1-teams-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- SF 2 -->
+                    <div class="clean-panel rounded-2xl p-5 shadow-sm space-y-4 border border-slate-200">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <span class="text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-200">Semifinal 2</span>
+                            <span class="text-xs font-medium text-slate-400">Juara Grup B vs Runner-Up Grup A</span>
+                        </div>
+                        <div class="space-y-3" id="sf2-teams-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINAL & JUARA 3 MATCHES -->
+            <div class="space-y-4 pt-4 border-t border-slate-200" id="user-final-section">
+                <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                    <span class="w-6 h-6 rounded bg-amber-100 text-amber-800 inline-flex items-center justify-center text-xs font-bold">F</span>
+                    Babak Final & Perebutan Juara 3
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- PEREBUTAN JUARA 3 -->
+                    <div class="clean-panel rounded-2xl p-5 shadow-sm space-y-4 border border-slate-200 bg-amber-50/10">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <span class="text-xs font-bold text-amber-800 bg-amber-100/70 px-2.5 py-1 rounded-lg border border-amber-200">Perebutan Juara 3</span>
+                            <span class="text-xs text-slate-400">Tim Kalah SF1 vs SF2</span>
+                        </div>
+                        <div class="space-y-3" id="third-teams-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- GRAND FINAL -->
+                    <div class="clean-panel rounded-2xl p-5 shadow-sm space-y-4 border-2 border-emerald-400 bg-emerald-50/20">
+                        <div class="flex justify-between items-center border-b border-emerald-100 pb-3">
+                            <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-trophy text-amber-500"></i> Grand Final
+                            </span>
+                            <span class="text-xs text-slate-400">Pemenang SF1 vs SF2</span>
+                        </div>
+                        <div class="space-y-3" id="final-teams-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PODIUM JUARA SUMMARY -->
+            <div id="podium-section" class="clean-panel rounded-3xl p-6 sm:p-8 border border-amber-200 bg-gradient-to-br from-amber-500/10 via-emerald-500/5 to-sky-500/10 shadow-lg">
+                <div class="text-center max-w-md mx-auto mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-amber-200 shadow-sm">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900">Podium Kejuaraan HSN Cup 2026</h3>
+                    <p class="text-xs text-slate-500 mt-1">Daftar Pemenang Resmi Turnamen Bulutangkis Instansi</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <!-- JUARA 2 -->
+                    <div class="clean-panel rounded-2xl p-4 border border-slate-200 bg-white/90 flex flex-col justify-between">
+                        <div>
+                            <span class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold inline-flex items-center justify-center text-sm mb-2">2</span>
+                            <p class="text-xs font-bold text-slate-500 uppercase">Runner-up (Juara 2)</p>
+                            <h4 id="podium-juara2" class="text-base font-extrabold text-slate-900 mt-1">--</h4>
+                        </div>
+                    </div>
+                    <!-- JUARA 1 -->
+                    <div class="clean-panel rounded-2xl p-5 border-2 border-amber-400 bg-amber-50/90 flex flex-col justify-between shadow-md -translate-y-1">
+                        <div>
+                            <span class="w-10 h-10 rounded-full bg-amber-400 text-amber-950 font-black inline-flex items-center justify-center text-base mb-2 shadow-sm">1</span>
+                            <p class="text-xs font-extrabold text-amber-700 uppercase">JUARA 1 (CHAMPION)</p>
+                            <h4 id="podium-juara1" class="text-lg font-black text-slate-900 mt-1">--</h4>
+                        </div>
+                    </div>
+                    <!-- JUARA 3 -->
+                    <div class="clean-panel rounded-2xl p-4 border border-amber-200 bg-white/90 flex flex-col justify-between">
+                        <div>
+                            <span class="w-8 h-8 rounded-full bg-amber-700 text-amber-100 font-bold inline-flex items-center justify-center text-sm mb-2">3</span>
+                            <p class="text-xs font-bold text-slate-500 uppercase">Juara 3</p>
+                            <h4 id="podium-juara3" class="text-base font-extrabold text-slate-900 mt-1">--</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const DEFAULT_TOURNAMENT_DATA = {
+            groups: {
+                A: [
+                    { id: 'a1', name: 'BPS Provinsi Maluku', group: 'A', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'a2', name: 'BPJS Kesehatan', group: 'A', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'a3', name: 'BPPP', group: 'A', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'a4', name: 'BDK', group: 'A', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'a5', name: 'OJK', group: 'A', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 }
+                ],
+                B: [
+                    { id: 'b1', name: 'Kemenkeu Provinsi Maluku', group: 'B', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'b2', name: 'BPKP', group: 'B', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'b3', name: 'DPKP', group: 'B', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'b4', name: 'BKKBN', group: 'B', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 },
+                    { id: 'b5', name: 'BI', group: 'B', played: 0, wins: 0, losses: 0, matchWins: 0, matchLosses: 0, gameWins: 0, gameLosses: 0, points: 0 }
+                ]
+            },
+            matches: [],
+            knockout: {
+                sf1: { score1: null, score2: null, played: false },
+                sf2: { score1: null, score2: null, played: false },
+                third: { score1: null, score2: null, played: false },
+                final: { score1: null, score2: null, played: false }
+            },
+            isFinished: false,
+            userViewMode: 'all'
+        };
+
+        const STORAGE_KEY = 'badmintonTournamentCleanV5';
+        let tournamentData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || DEFAULT_TOURNAMENT_DATA;
+        if (!tournamentData.knockout || typeof tournamentData.knockout.sf1 !== 'object' || tournamentData.knockout.sf1 === null) {
+            tournamentData.knockout = JSON.parse(JSON.stringify(DEFAULT_TOURNAMENT_DATA.knockout));
+        }
+        if (!tournamentData.userViewMode) tournamentData.userViewMode = 'all';
+
+        let lastDataSnapshot = '';
+
+        function syncFromAdmin() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw || raw === lastDataSnapshot) return;
+            lastDataSnapshot = raw;
+            try {
+                tournamentData = JSON.parse(raw) || DEFAULT_TOURNAMENT_DATA;
+            } catch (e) {
+                tournamentData = DEFAULT_TOURNAMENT_DATA;
+            }
+            if (!tournamentData.knockout || typeof tournamentData.knockout.sf1 !== 'object' || tournamentData.knockout.sf1 === null) {
+                tournamentData.knockout = JSON.parse(JSON.stringify(DEFAULT_TOURNAMENT_DATA.knockout));
+            }
+            if (!tournamentData.userViewMode) tournamentData.userViewMode = 'all';
+            renderAllViews();
+            applyUserViewMode();
+        }
+
+        window.onload = function() {
+            lastDataSnapshot = localStorage.getItem(STORAGE_KEY) || '';
+            renderAllViews();
+            applyUserViewMode();
+
+            // Sinkron real-time antar tab (storage event)
+            window.addEventListener('storage', function(e) {
+                if (e.key === STORAGE_KEY) syncFromAdmin();
+            });
+
+            // Polling cadangan (agar tetap sinkron walau file dibuka lokal)
+            setInterval(syncFromAdmin, 1500);
+        };
+
+        function refreshDataManual() {
+            lastDataSnapshot = '';
+            syncFromAdmin();
+        }
+
+        function switchTab(tabId, force) {
+            // Jika mode dikunci admin, user TIDAK boleh ganti tab sendiri
+            const mode = tournamentData.userViewMode || 'all';
+            if (!force) {
+                if (mode === 'penyisihan' && tabId !== 'penyisihan') return;
+                if ((mode === 'semifinal' || mode === 'final') && tabId !== 'knockout') return;
+                if (mode !== 'all') return; // kunci total: user tidak pilih sendiri
+            }
+
+            document.getElementById('tab-content-penyisihan').classList.add('hidden');
+            document.getElementById('tab-content-knockout').classList.add('hidden');
+
+            const btnPenyisihan = document.getElementById('tab-btn-penyisihan');
+            const btnKnockout = document.getElementById('tab-btn-knockout');
+
+            [btnPenyisihan, btnKnockout].forEach(btn => {
+                if (!btn) return;
+                btn.className = "flex-1 min-w-[200px] py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100";
+            });
+
+            if (tabId === 'penyisihan') {
+                document.getElementById('tab-content-penyisihan').classList.remove('hidden');
+                if (btnPenyisihan) btnPenyisihan.className = "flex-1 min-w-[200px] py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-xs";
+            } else if (tabId === 'knockout') {
+                document.getElementById('tab-content-knockout').classList.remove('hidden');
+                if (btnKnockout) btnKnockout.className = "flex-1 min-w-[200px] py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-xs";
+            }
+        }
+
+        function applyUserViewMode() {
+            const mode = tournamentData.userViewMode || 'all';
+            const tabNav = document.getElementById('user-tab-nav');
+            const banner = document.getElementById('admin-control-banner');
+            const label = document.getElementById('admin-control-label');
+            const badge = document.getElementById('admin-control-mode-badge');
+
+            const sfSection = document.getElementById('user-sf-section');
+            const finalSection = document.getElementById('user-final-section');
+            const podiumSection = document.getElementById('podium-section');
+            const backBtn = document.querySelector('#tab-content-knockout button[onclick*="penyisihan"]');
+
+            const modeLabels = {
+                all: 'Semua babak (user bebas pilih tab)',
+                penyisihan: 'Hanya Babak Penyisihan',
+                semifinal: 'Hanya Babak Semifinal',
+                final: 'Hanya Final & Podium'
+            };
+            const badgeLabels = { all: 'Semua', penyisihan: 'Penyisihan', semifinal: 'Semifinal', final: 'Final' };
+
+            if (label) label.textContent = 'Mode: ' + (modeLabels[mode] || mode);
+            if (badge) badge.textContent = badgeLabels[mode] || mode;
+
+            if (mode === 'all') {
+                if (tabNav) tabNav.classList.remove('hidden');
+                if (banner) banner.classList.add('hidden');
+                if (sfSection) sfSection.classList.remove('hidden');
+                if (finalSection) finalSection.classList.remove('hidden');
+                if (podiumSection) podiumSection.classList.remove('hidden');
+                if (backBtn) backBtn.classList.remove('hidden');
+                switchTab('penyisihan', true);
+            } else {
+                // Mode dikunci admin → sembunyikan tab, tampilkan banner
+                if (tabNav) tabNav.classList.add('hidden');
+                if (banner) banner.classList.remove('hidden');
+
+                if (mode === 'penyisihan') {
+                    if (sfSection) sfSection.classList.remove('hidden');
+                    if (finalSection) finalSection.classList.remove('hidden');
+                    if (podiumSection) podiumSection.classList.remove('hidden');
+                    switchTab('penyisihan', true);
+                } else if (mode === 'semifinal') {
+                    if (sfSection) sfSection.classList.remove('hidden');
+                    if (finalSection) finalSection.classList.add('hidden');
+                    if (podiumSection) podiumSection.classList.add('hidden');
+                    if (backBtn) backBtn.classList.add('hidden');
+                    switchTab('knockout', true);
+                } else if (mode === 'final') {
+                    if (sfSection) sfSection.classList.add('hidden');
+                    if (finalSection) finalSection.classList.remove('hidden');
+                    if (podiumSection) podiumSection.classList.remove('hidden');
+                    if (backBtn) backBtn.classList.add('hidden');
+                    switchTab('knockout', true);
+                }
+            }
+        }
+
+        function renderAllViews() {
+            renderGroupTable('A', 'group-a-table-body', 'group-a-count');
+            renderGroupTable('B', 'group-b-table-body', 'group-b-count');
+            renderKnockoutMatches();
+        }
+
+        function renderGroupTable(groupKey, tbodyId, countId) {
+            const tbody = document.getElementById(tbodyId);
+            const countEl = document.getElementById(countId);
+            const teams = (tournamentData.groups[groupKey] || []).slice();
+            
+            if (countEl) countEl.innerText = `${teams.length} Instansi Peserta`;
+
+            // Sort by points desc, match wins desc, game difference desc
+            teams.sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                const diffA = a.gameWins - a.gameLosses;
+                const diffB = b.gameWins - b.gameLosses;
+                if (diffB !== diffA) return diffB - diffA;
+                return b.matchWins - a.matchWins;
+            });
+
+            // FLIP: capture old positions
+            const oldPositions = {};
+            const oldRanks = {};
+            tbody.querySelectorAll('tr[data-team-id]').forEach(row => {
+                const id = row.getAttribute('data-team-id');
+                oldPositions[id] = row.getBoundingClientRect().top;
+                oldRanks[id] = parseInt(row.getAttribute('data-rank') || '0', 10);
+            });
+
+            // Build new rows
+            const fragment = document.createDocumentFragment();
+            teams.forEach((team, index) => {
+                const isTop2 = index < 2;
+                const posBg = index === 0 ? 'bg-amber-100 text-amber-800 font-extrabold' : (index === 1 ? 'bg-slate-200 text-slate-700 font-bold' : 'text-slate-500 font-semibold');
+                const diff = team.gameWins - team.gameLosses;
+                const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50/60 transition rank-row';
+                row.setAttribute('data-team-id', team.id);
+                row.setAttribute('data-rank', index + 1);
+
+                row.innerHTML = `
+                    <td class="py-3 px-2">
+                        <span class="rank-badge w-6 h-6 rounded-lg inline-flex items-center justify-center text-xs ${posBg}">
+                            ${index + 1}
+                        </span>
+                    </td>
+                    <td class="py-3 px-3 font-semibold text-slate-800 flex items-center gap-1.5">
+                        ${team.name}
+                        ${isTop2 ? '<i class="fa-solid fa-medal text-amber-500 text-xs" title="Zona Semifinal"></i>' : ''}
+                    </td>
+                    <td class="py-3 px-2 text-center text-slate-600">${team.played}</td>
+                    <td class="py-3 px-2 text-center text-slate-600">${team.matchWins}-${team.matchLosses}</td>
+                    <td class="py-3 px-2 text-center text-slate-600">${team.gameWins}-${team.gameLosses} (${diffStr})</td>
+                    <td class="py-3 px-3 text-center font-black text-emerald-700">${team.points}</td>
+                `;
+                fragment.appendChild(row);
+            });
+
+            tbody.innerHTML = '';
+            tbody.appendChild(fragment);
+
+            // FLIP: animate from old to new positions
+            const rows = tbody.querySelectorAll('tr[data-team-id]');
+            rows.forEach(row => {
+                const id = row.getAttribute('data-team-id');
+                const newTop = row.getBoundingClientRect().top;
+                const oldTop = oldPositions[id];
+                const oldRank = oldRanks[id];
+                const newRank = parseInt(row.getAttribute('data-rank'), 10);
+
+                if (oldTop !== undefined) {
+                    const deltaY = oldTop - newTop;
+                    if (Math.abs(deltaY) > 2) {
+                        row.classList.add('animating');
+                        row.style.transform = `translateY(${deltaY}px)`;
+                        row.style.transition = 'none';
+
+                        row.offsetHeight; // force reflow
+
+                        row.style.transition = 'transform 1.15s cubic-bezier(0.16, 1, 0.3, 1)';
+                        row.style.transform = 'translateY(0)';
+
+                        if (oldRank && newRank < oldRank) {
+                            row.classList.add('rank-up');
+                        } else if (oldRank && newRank > oldRank) {
+                            row.classList.add('rank-down');
+                        }
+
+                        setTimeout(() => {
+                            row.classList.remove('animating', 'rank-up', 'rank-down');
+                            row.style.transition = '';
+                            row.style.transform = '';
+                        }, 1600);
+                    }
+                }
+            });
+        }
+
+        function renderKnockoutMatches() {
+            const sf1Container = document.getElementById('sf1-teams-container');
+            const sf2Container = document.getElementById('sf2-teams-container');
+            const thirdContainer = document.getElementById('third-teams-container');
+            const finalContainer = document.getElementById('final-teams-container');
+
+            // Sort groups same as admin
+            const sortTeams = (arr) => (arr || []).slice().sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                const diffA = a.matchWins - a.matchLosses;
+                const diffB = b.matchWins - b.matchLosses;
+                if (diffB !== diffA) return diffB - diffA;
+                return (b.gameWins - b.gameLosses) - (a.gameWins - a.gameLosses);
+            });
+
+            const teamsA = sortTeams(tournamentData.groups.A);
+            const teamsB = sortTeams(tournamentData.groups.B);
+
+            const juaraA = teamsA[0] ? teamsA[0].name : 'Juara Grup A';
+            const runnerA = teamsA[1] ? teamsA[1].name : 'Runner-up Grup A';
+            const juaraB = teamsB[0] ? teamsB[0].name : 'Juara Grup B';
+            const runnerB = teamsB[1] ? teamsB[1].name : 'Runner-up Grup B';
+
+            const ko = tournamentData.knockout || {};
+
+            // SF1: Juara A vs Runner B
+            if (sf1Container) {
+                const s1 = ko.sf1 || {};
+                sf1Container.innerHTML = `
+                    <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${s1.played && s1.score1 > s1.score2 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                        <span class="truncate">${juaraA}</span>
+                        <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${s1.played ? s1.score1 : '-'}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${s1.played && s1.score2 > s1.score1 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                        <span class="truncate">${runnerB}</span>
+                        <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${s1.played ? s1.score2 : '-'}</span>
+                    </div>
+                `;
+            }
+
+            // SF2: Juara B vs Runner A
+            if (sf2Container) {
+                const s2 = ko.sf2 || {};
+                sf2Container.innerHTML = `
+                    <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${s2.played && s2.score1 > s2.score2 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                        <span class="truncate">${juaraB}</span>
+                        <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${s2.played ? s2.score1 : '-'}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${s2.played && s2.score2 > s2.score1 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                        <span class="truncate">${runnerA}</span>
+                        <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${s2.played ? s2.score2 : '-'}</span>
+                    </div>
+                `;
+            }
+
+            // Third place
+            let kalahSF1 = 'Kalah SF 1';
+            let kalahSF2 = 'Kalah SF 2';
+            let menangSF1 = 'Pemenang SF 1';
+            let menangSF2 = 'Pemenang SF 2';
+            if (ko.sf1 && ko.sf1.played) {
+                kalahSF1 = ko.sf1.score1 > ko.sf1.score2 ? runnerB : juaraA;
+                menangSF1 = ko.sf1.score1 > ko.sf1.score2 ? juaraA : runnerB;
+            }
+            if (ko.sf2 && ko.sf2.played) {
+                kalahSF2 = ko.sf2.score1 > ko.sf2.score2 ? runnerA : juaraB;
+                menangSF2 = ko.sf2.score1 > ko.sf2.score2 ? juaraB : runnerA;
+            }
+
+            if (thirdContainer) {
+                const t = ko.third || {};
+                if (t.played) {
+                    thirdContainer.innerHTML = `
+                        <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${t.score1 > t.score2 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                            <span class="truncate">${kalahSF1}</span>
+                            <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${t.score1}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${t.score2 > t.score1 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                            <span class="truncate">${kalahSF2}</span>
+                            <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${t.score2}</span>
+                        </div>
+                    `;
+                } else {
+                    thirdContainer.innerHTML = `
+                        <div class="p-3 rounded-xl bg-white border border-slate-200 text-center text-xs text-slate-500 font-medium">
+                            ${ko.sf1 && ko.sf1.played && ko.sf2 && ko.sf2.played ? `${kalahSF1} vs ${kalahSF2}` : 'Menunggu hasil Semifinal'}
+                        </div>
+                    `;
+                }
+            }
+
+            // Final
+            if (finalContainer) {
+                const f = ko.final || {};
+                if (f.played) {
+                    finalContainer.innerHTML = `
+                        <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${f.score1 > f.score2 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                            <span class="truncate">${menangSF1}</span>
+                            <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${f.score1}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm p-2.5 rounded-xl bg-slate-50 border border-slate-200 ${f.score2 > f.score1 ? 'font-black text-emerald-700 bg-emerald-50/70 border-emerald-200' : ''}">
+                            <span class="truncate">${menangSF2}</span>
+                            <span class="font-black px-2 py-0.5 rounded bg-white border border-slate-300 text-xs">${f.score2}</span>
+                        </div>
+                    `;
+                } else {
+                    finalContainer.innerHTML = `
+                        <div class="p-3 rounded-xl bg-white border border-emerald-200 text-center text-xs text-emerald-800 font-bold">
+                            ${ko.sf1 && ko.sf1.played && ko.sf2 && ko.sf2.played ? `${menangSF1} vs ${menangSF2}` : 'Menunggu hasil Semifinal'}
+                        </div>
+                    `;
+                }
+            }
+
+            // Podium
+            const podium1 = document.getElementById('podium-juara1');
+            const podium2 = document.getElementById('podium-juara2');
+            const podium3 = document.getElementById('podium-juara3');
+            if (ko.final && ko.final.played) {
+                if (podium1) podium1.textContent = ko.final.score1 > ko.final.score2 ? menangSF1 : menangSF2;
+                if (podium2) podium2.textContent = ko.final.score1 > ko.final.score2 ? menangSF2 : menangSF1;
+            } else {
+                if (podium1) podium1.textContent = '--';
+                if (podium2) podium2.textContent = '--';
+            }
+            if (ko.third && ko.third.played) {
+                if (podium3) podium3.textContent = ko.third.score1 > ko.third.score2 ? kalahSF1 : kalahSF2;
+            } else {
+                if (podium3) podium3.textContent = '--';
+            }
+        }
+    </script>
+</body>
+</html>
